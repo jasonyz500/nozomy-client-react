@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import { fetchWeek } from '../actions';
+import { fetchWeek } from '../../actions';
 
 import moment from 'moment';
 

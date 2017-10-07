@@ -1,10 +1,10 @@
 import React from 'react'
-import Navbar from './navbar/navbar'
+import Navigation from './navigation/navigation'
 import Main from './main'
 
 const App = () => (
   <div>
-    <Navbar />
+    <Navigation />
     <Main />
   </div>
 )

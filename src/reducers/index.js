@@ -1,8 +1,8 @@
 import { combineReducers } from 'redux';
-import WeekReducer from './reducer_week';
+import WeeksReducer from './reducer_weeks';
 
 const rootReducer = combineReducers({
-  week: WeekReducer
+  weeks: WeeksReducer
 });
 
 export default rootReducer;

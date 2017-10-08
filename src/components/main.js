@@ -10,6 +10,7 @@ const Main = () => (
       <Route exact path='/' component={Home}/>
       <Route path='/visualize' component={Visualize}/>
       <Route path='/root' component={Root}/>
+      <Route path='/:weekStr' component={Home}/>
     </Switch>
   </main>
 )

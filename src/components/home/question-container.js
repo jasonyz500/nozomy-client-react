@@ -16,7 +16,7 @@ class QuestionContainer extends Component {
   render() {
     return (
       <div className="form-group">
-        <label></label>
+        <label>{this.props.question}</label>
         <textarea rows="7" className="form-control" onChange={event => this.onInputChange(event.target.value)}>
           {this.state.body}
         </textarea>

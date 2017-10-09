@@ -8,6 +8,8 @@ import { fetchWeek, updateResponse } from '../../actions';
 
 import './home.css';
 
+const queryString = require('query-string');
+
 const days = [
   'Monday',
   'Tuesday',
@@ -19,9 +21,17 @@ const days = [
 ];
 
 class Home extends Component {
+  constructor(props) {
+    super(props);
+    const parsedQuery = queryString.parse(props.location.search);
+    this.state = { 
+      weekStr: props.match.params.weekStr || getCurrentWeekStr(),
+      selectedDay: parsedQuery.day || (moment().format('d')+6)%7
+    };
+  }
+
   componentDidMount() {
-    const weekStr = this.props.match.params.weekStr || getCurrentWeekStr();
-    this.populate(weekStr);
+    this.populate(this.state.weekStr);
   }
 
   populate(weekStr) {
@@ -31,13 +41,17 @@ class Home extends Component {
   drawDayOfWeekTabs() {
     return _.map(_.range(7), i => {
       return (
-        <NavItem key={days[i]}>{days[i]}</NavItem>
+        <NavItem key={days[i]} eventKey={i}>{days[i]}</NavItem>
       );
     });
   }
 
-  handleSelectDay() {
-
+  handleSelectDay(selectedDay) {
+    this.props.history.push({
+      pathname: this.props.match.params.weekStr || getCurrentWeekStr(),
+      search: `?day=${selectedDay}`
+    });
+    this.setState({ selectedDay });
   }
 
   drawQuestionContainers(responses) {
@@ -48,6 +62,7 @@ class Home extends Component {
         <QuestionContainer 
           key={response._id} 
           body={response.body}
+          question={response.question}
           onChange={ (body) => autosave(response, body) }
         />
       );
@@ -63,6 +78,7 @@ class Home extends Component {
 
   render() {
     const { week } = this.props;
+    console.log(week);
     if (!week) {
       return (<div>Loading...</div>);
     }
@@ -70,9 +86,15 @@ class Home extends Component {
       <div>
         <Panel>
           <h5>Daily</h5>
-          <Nav bsStyle="tabs" onSelect={this.handleSelectDay}>
+          <Nav 
+            bsStyle="tabs" 
+            activeKey={this.state.selectedDay}
+            justified 
+            onSelect={this.handleSelectDay.bind(this)}
+          >
             {this.drawDayOfWeekTabs()}
           </Nav>
+          {this.drawQuestionContainers(week.daily_responses[this.state.selectedDay])}
         </Panel>
         <Panel>
           <h5>Weekly</h5>

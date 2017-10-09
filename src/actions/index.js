@@ -4,6 +4,11 @@ export const FETCH_WEEK = 'fetch_week';
 export const UPDATE_RESPONSE = 'update_response';
 
 const ROOT_URL = 'http://localhost:3000';
+const CONFIG = {
+  headers: {
+    'Content-Type': 'application/json'
+  }
+};
 
 export function fetchWeek(weekStr) {
   const request = axios.get(`${ROOT_URL}/week/${weekStr}`);
@@ -15,7 +20,7 @@ export function fetchWeek(weekStr) {
 }
 
 export function updateResponse(response) {
-  const request = axios.patch(`${ROOT_URL}/responses/${response._id}`, JSON.stringify(response));
+  const request = axios.patch(`${ROOT_URL}/responses/${response._id}`, JSON.stringify(response), CONFIG);
 
   return {
     type: UPDATE_RESPONSE,

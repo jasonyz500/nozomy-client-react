@@ -1,5 +1,6 @@
 import axios from 'axios';
 
+export const SELECT_WEEK = 'select_week';
 export const FETCH_WEEK = 'fetch_week';
 export const UPDATE_RESPONSE = 'update_response';
 
@@ -9,6 +10,13 @@ const CONFIG = {
     'Content-Type': 'application/json'
   }
 };
+
+export function selectWeek(weekStr) {
+  return {
+    type: SELECT_WEEK,
+    payload: weekStr
+  }
+}
 
 export function fetchWeek(weekStr) {
   const request = axios.get(`${ROOT_URL}/week/${weekStr}`);

@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import { Panel, Nav, NavItem } from 'react-bootstrap'
+import { Panel, Nav, NavItem, Button, Glyphicon } from 'react-bootstrap'
 import moment from 'moment';
 import _ from 'lodash';
 import QuestionContainer from './question-container';
@@ -38,20 +38,22 @@ class Home extends Component {
     this.props.fetchWeek(weekStr);
   }
 
+  getPageTitle() {
+    const { weekStr } = this.state;
+    const endMonth = moment(weekStr).endOf('isoWeek').month();
+    const suffix = endMonth === moment(weekStr) ? '' : moment(endMonth).format('MMMM');
+    const prefix = moment().startOf('isoWeek').format('YYYY-MM-DD') === weekStr ? 'This Week: ' : '';
+    const weekNo = moment(weekStr).startOf('isoWeek').week();
+    const year = weekStr.slice(0,4);
+    return `${prefix}${moment(weekStr).format('MMMM Do')} - ${suffix} ${moment(weekStr).endOf('isoWeek').format('Do')} (${year} Week ${weekNo})`;
+  }
+
   drawDayOfWeekTabs() {
     return _.map(_.range(7), i => {
       return (
         <NavItem key={days[i]} eventKey={i}>{days[i]}</NavItem>
       );
     });
-  }
-
-  handleSelectDay(selectedDay) {
-    this.props.history.push({
-      pathname: this.props.match.params.weekStr || getCurrentWeekStr(),
-      search: `?day=${selectedDay}`
-    });
-    this.setState({ selectedDay });
   }
 
   drawQuestionContainers(responses) {
@@ -69,23 +71,45 @@ class Home extends Component {
     });
   }
 
+  handleSelectDay(selectedDay) {
+    this.props.history.push({
+      pathname: this.props.match.params.weekStr || getCurrentWeekStr(),
+      search: `?day=${selectedDay}`
+    });
+    this.setState({ selectedDay });
+  }
+
+  handleArrow(diff) {
+    this.props.history.push({
+      pathname: moment(this.state.weekStr).add(diff, 'days').format('YYYY-MM-DD'),
+      search: `?day=${this.state.selectedDay}`
+    });
+    this.setState({
+      weekStr: moment(this.state.weekStr).add(diff, 'days').format('YYYY-MM-DD')
+    })
+    this.populate(this.state.weekStr)
+  }
+
   autosave(response, body) {
     response.body = body;
     response.last_save_time = moment().unix();
-    console.log(response);
     this.props.updateResponse(response);
   }
 
   render() {
     const { week } = this.props;
-    console.log(week);
     if (!week) {
       return (<div>Loading...</div>);
     }
+
     return (
       <div>
         <Panel>
-          <h5>Daily</h5>
+          <Button onClick={() => {this.handleArrow(-7)}}><Glyphicon glyph="arrow-left" /> Previous Week</Button>
+          <h1>{this.getPageTitle()}</h1>
+          <Button onClick={() => {this.handleArrow(7)}}>Next Week <Glyphicon glyph="arrow-right" /></Button>
+        </Panel>
+        <Panel>
           <Nav 
             bsStyle="tabs" 
             activeKey={this.state.selectedDay}
@@ -95,9 +119,6 @@ class Home extends Component {
             {this.drawDayOfWeekTabs()}
           </Nav>
           {this.drawQuestionContainers(week.daily_responses[this.state.selectedDay])}
-        </Panel>
-        <Panel>
-          <h5>Weekly</h5>
           {this.drawQuestionContainers(week.weekly_responses)}
         </Panel>
       </div>

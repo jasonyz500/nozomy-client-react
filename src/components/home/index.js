@@ -24,13 +24,25 @@ class Home extends Component {
   constructor(props) {
     super(props);
     const parsedQuery = queryString.parse(props.location.search);
-    this.state = { 
+    this.state = {
       weekStr: props.match.params.weekStr || getCurrentWeekStr(),
       selectedDay: parsedQuery.day || (moment().format('d')+6)%7
     };
   }
 
   componentDidMount() {
+    this.populate(this.state.weekStr);
+  }
+
+  componentWillReceiveProps(props) {
+    const parsedQuery = queryString.parse(props.location.search);
+    this.setState({
+      weekStr: props.match.params.weekStr || getCurrentWeekStr(),
+      selectedDay: parsedQuery.day || (moment().format('d')+6)%7
+    });
+  }
+
+  componentDidUpdate(prevProps, prevState, prevContext) {
     this.populate(this.state.weekStr);
   }
 
@@ -41,7 +53,7 @@ class Home extends Component {
   getPageTitle() {
     const { weekStr } = this.state;
     const endMonth = moment(weekStr).endOf('isoWeek').month();
-    const suffix = endMonth === moment(weekStr) ? '' : moment(endMonth).format('MMMM');
+    const suffix = endMonth === moment(weekStr).month() ? '' : moment().month(endMonth).format('MMMM');
     const prefix = moment().startOf('isoWeek').format('YYYY-MM-DD') === weekStr ? 'This Week: ' : '';
     const weekNo = moment(weekStr).startOf('isoWeek').week();
     const year = weekStr.slice(0,4);

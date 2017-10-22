@@ -3,8 +3,8 @@ import { connect } from 'react-redux';
 import { Panel, Nav, NavItem, Button, Glyphicon } from 'react-bootstrap'
 import moment from 'moment';
 import _ from 'lodash';
-import QuestionContainer from './question-container';
-import { fetchWeek, updateResponse } from '../../actions';
+import EntryContainer from './entry-container';
+import { fetchWeek } from '../../actions';
 
 import './home.css';
 
@@ -68,16 +68,14 @@ class Home extends Component {
     });
   }
 
-  drawQuestionContainers(responses) {
-    const autosave = _.debounce((response, body) => {this.autosave(response, body)}, 300);
+  drawEntryContainers(entries) {
+    const autosave = _.debounce((entry, body) => {this.autosave(entry, body)}, 300);
 
-    return _.map(responses, response => {
+    return _.map(entries, entry => {
       return (
-        <QuestionContainer 
-          key={response._id} 
-          body={response.body}
-          question={response.question}
-          onChange={ (body) => autosave(response, body) }
+        <EntryContainer 
+          key={entry._id} 
+          entry={entry}
         />
       );
     });
@@ -102,12 +100,6 @@ class Home extends Component {
     this.populate(this.state.weekStr)
   }
 
-  autosave(response, body) {
-    response.body = body;
-    response.last_save_time = moment().unix();
-    this.props.updateResponse(response);
-  }
-
   render() {
     const { week } = this.props;
     if (!week) {
@@ -130,8 +122,8 @@ class Home extends Component {
           >
             {this.drawDayOfWeekTabs()}
           </Nav>
-          {this.drawQuestionContainers(week.daily_responses[this.state.selectedDay])}
-          {this.drawQuestionContainers(week.weekly_responses)}
+          {this.drawEntryContainers(week.daily_entries[this.state.selectedDay])}
+          {this.drawEntryContainers(week.weekly_entries)}
         </Panel>
       </div>
     );
@@ -147,4 +139,4 @@ function mapStateToProps({ weeks }, ownProps) {
   return { week: weeks[weekStr] };
 }
 
-export default connect(mapStateToProps, { fetchWeek, updateResponse })(Home);
+export default connect(mapStateToProps, { fetchWeek })(Home);

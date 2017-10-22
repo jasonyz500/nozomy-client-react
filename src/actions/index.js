@@ -1,8 +1,7 @@
 import axios from 'axios';
 
-export const SELECT_WEEK = 'select_week';
 export const FETCH_WEEK = 'fetch_week';
-export const UPDATE_RESPONSE = 'update_response';
+export const UPDATE_ENTRY = 'update_entry';
 
 const ROOT_URL = 'http://localhost:3000';
 const CONFIG = {
@@ -10,13 +9,6 @@ const CONFIG = {
     'Content-Type': 'application/json'
   }
 };
-
-export function selectWeek(weekStr) {
-  return {
-    type: SELECT_WEEK,
-    payload: weekStr
-  }
-}
 
 export function fetchWeek(weekStr) {
   const request = axios.get(`${ROOT_URL}/week/${weekStr}`);
@@ -27,11 +19,11 @@ export function fetchWeek(weekStr) {
   }
 }
 
-export function updateResponse(response) {
-  const request = axios.patch(`${ROOT_URL}/responses/${response._id}`, JSON.stringify(response), CONFIG);
+export function updateEntry(entry) {
+  const request = axios.patch(`${ROOT_URL}/entries/${entry._id}`, JSON.stringify(entry), CONFIG);
 
   return {
-    type: UPDATE_RESPONSE,
+    type: UPDATE_ENTRY,
     payload: request
   }
 }

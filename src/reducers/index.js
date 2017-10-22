@@ -1,10 +1,10 @@
 import { combineReducers } from 'redux';
 import WeeksReducer from './reducer_weeks';
-import ResponsesReducer from './reducer_responses';
+import EntriesReducer from './reducer_entries';
 
 const rootReducer = combineReducers({
   weeks: WeeksReducer,
-  responses: ResponsesReducer
+  entries: EntriesReducer
 });
 
 export default rootReducer;

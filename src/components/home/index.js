@@ -42,9 +42,9 @@ class Home extends Component {
     });
   }
 
-  componentDidUpdate(prevProps, prevState, prevContext) {
-    this.populate(this.state.weekStr);
-  }
+  // componentDidUpdate(prevProps, prevState, prevContext) {
+  //   this.populate(this.state.weekStr);
+  // }
 
   populate(weekStr) {
     this.props.fetchWeek(weekStr);
@@ -69,8 +69,6 @@ class Home extends Component {
   }
 
   drawEntryContainers(entries) {
-    const autosave = _.debounce((entry, body) => {this.autosave(entry, body)}, 300);
-
     return _.map(entries, entry => {
       return (
         <EntryContainer 
@@ -122,8 +120,8 @@ class Home extends Component {
           >
             {this.drawDayOfWeekTabs()}
           </Nav>
-          {this.drawEntryContainers(week.daily_entries[this.state.selectedDay])}
-          {this.drawEntryContainers(week.weekly_entries)}
+          {this.drawEntryContainers(week.daily[this.state.selectedDay])}
+          {this.drawEntryContainers(week.weekly)}
         </Panel>
       </div>
     );

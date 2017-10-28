@@ -11,11 +11,12 @@ const CONFIG = {
 };
 
 export function fetchWeek(weekStr) {
-  const request = axios.get(`${ROOT_URL}/week/${weekStr}`);
+  const request = axios.get(`${ROOT_URL}/entries?start_date=${weekStr}&end_date=${weekStr}`);
 
   return {
     type: FETCH_WEEK,
-    payload: request
+    payload: request,
+    weekStr: weekStr
   }
 }
 

@@ -4,7 +4,7 @@ import { Panel, Nav, NavItem, Button, Glyphicon } from 'react-bootstrap'
 import moment from 'moment';
 import _ from 'lodash';
 import EntryContainer from './entry-container';
-import { fetchWeek } from '../../actions';
+import { fetchWeek, addEntry } from '../../actions';
 
 import './home.css';
 
@@ -79,6 +79,17 @@ class Home extends Component {
     });
   }
 
+  handleAddEntry(is_weekly, week_string, date_string, day_of_week_iso) {
+    const entry = {
+      user_id: 1,
+      is_weekly: is_weekly,
+      week_string: week_string,
+      date_string: date_string,
+      day_of_week_iso: day_of_week_iso
+    };
+    addEntry(entry);
+  }
+
   handleSelectDay(selectedDay) {
     this.props.history.push({
       pathname: this.props.match.params.weekStr || getCurrentWeekStr(),
@@ -121,7 +132,9 @@ class Home extends Component {
             {this.drawDayOfWeekTabs()}
           </Nav>
           {this.drawEntryContainers(week.daily[this.state.selectedDay])}
+          <Button onClick={() => this.handleAddEntry(false)}>Add New Entry <Glyphicon glyph="plus" /></Button>
           {this.drawEntryContainers(week.weekly)}
+          <Button onClick={() => this.handleAddEntry(false)}>Add New Entry <Glyphicon glyph="plus" /></Button>
         </Panel>
       </div>
     );
@@ -137,4 +150,4 @@ function mapStateToProps({ weeks }, ownProps) {
   return { week: weeks[weekStr] };
 }
 
-export default connect(mapStateToProps, { fetchWeek })(Home);
+export default connect(mapStateToProps, { fetchWeek, addEntry })(Home);

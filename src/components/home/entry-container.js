@@ -33,7 +33,7 @@ class EntryContainer extends Component {
         <textarea
           rows="7"
           className="form-control"
-          placeholder="why was it significant? how did it make you feel?"
+          placeholder="body"
           onChange={event => this.onTextChange("body", event.target.value)}
         >
           {this.state.entry.body}

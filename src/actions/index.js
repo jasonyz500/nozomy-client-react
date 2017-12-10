@@ -1,6 +1,7 @@
 import axios from 'axios';
 
 export const FETCH_WEEK = 'fetch_week';
+export const ADD_ENTRY = 'add_entry';
 export const UPDATE_ENTRY = 'update_entry';
 
 const ROOT_URL = 'http://localhost:3000';
@@ -17,6 +18,13 @@ export function fetchWeek(weekStr) {
     type: FETCH_WEEK,
     payload: request,
     weekStr: weekStr
+  }
+}
+
+export function addEntry(entry) {
+  return {
+    type: ADD_ENTRY,
+    entry: entry
   }
 }
 

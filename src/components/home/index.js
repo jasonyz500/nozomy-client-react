@@ -25,19 +25,19 @@ class Home extends Component {
     super(props);
     const parsedQuery = queryString.parse(props.location.search);
     this.state = {
-      weekStr: props.match.params.weekStr || getCurrentWeekStr(),
+      weekStr: parsedQuery.week || getCurrentWeekStr(),
       selectedDay: parsedQuery.day || (moment().format('d')+6)%7
     };
   }
 
   componentDidMount() {
-    this.populate(this.state.weekStr);
+    this.props.fetchWeek(this.state.weekStr);
   }
 
   componentWillReceiveProps(props) {
     const parsedQuery = queryString.parse(props.location.search);
     this.setState({
-      weekStr: props.match.params.weekStr || getCurrentWeekStr(),
+      weekStr: parsedQuery.week || getCurrentWeekStr(),
       selectedDay: parsedQuery.day || (moment().format('d')+6)%7
     });
   }
@@ -45,10 +45,6 @@ class Home extends Component {
   // componentDidUpdate(prevProps, prevState, prevContext) {
   //   this.populate(this.state.weekStr);
   // }
-
-  populate(weekStr) {
-    this.props.fetchWeek(weekStr);
-  }
 
   getPageTitle() {
     const { weekStr } = this.state;
@@ -87,26 +83,25 @@ class Home extends Component {
       date_string: date_string,
       day_of_week_iso: day_of_week_iso
     };
-    addEntry(entry);
+    this.props.addEntry(entry);
   }
 
   handleSelectDay(selectedDay) {
     this.props.history.push({
-      pathname: this.props.match.params.weekStr || getCurrentWeekStr(),
-      search: `?day=${selectedDay}`
+      search: `?week=${this.state.weekStr}&day=${selectedDay}`
     });
-    this.setState({ selectedDay });
+    // this.setState({ selectedDay });
   }
 
   handleArrow(diff) {
+    const newWeekStr = moment(this.state.weekStr).add(diff, 'days').format('YYYY-MM-DD');
     this.props.history.push({
-      pathname: moment(this.state.weekStr).add(diff, 'days').format('YYYY-MM-DD'),
-      search: `?day=${this.state.selectedDay}`
+      search: `?week=${newWeekStr}&day=${this.state.selectedDay}`
     });
-    this.setState({
-      weekStr: moment(this.state.weekStr).add(diff, 'days').format('YYYY-MM-DD')
-    })
-    this.populate(this.state.weekStr)
+    // this.setState({
+    //   weekStr: moment(this.state.weekStr).add(diff, 'days').format('YYYY-MM-DD')
+    // });
+    this.props.fetchWeek(this.state.weekStr);
   }
 
   render() {
@@ -132,9 +127,17 @@ class Home extends Component {
             {this.drawDayOfWeekTabs()}
           </Nav>
           {this.drawEntryContainers(week.daily[this.state.selectedDay])}
-          <Button onClick={() => this.handleAddEntry(false)}>Add New Entry <Glyphicon glyph="plus" /></Button>
+          <Button 
+            onClick={() => this.handleAddEntry(false, this.state.weekStr, this.state.weekStr, this.state.selectedDay)}
+          >
+            Add New Entry <Glyphicon glyph="plus" />
+          </Button>
           {this.drawEntryContainers(week.weekly)}
-          <Button onClick={() => this.handleAddEntry(false)}>Add New Entry <Glyphicon glyph="plus" /></Button>
+          <Button
+            onClick={() => this.handleAddEntry(false, this.state.weekStr, null, null)}
+          >
+            Add New Entry <Glyphicon glyph="plus" />
+          </Button>
         </Panel>
       </div>
     );

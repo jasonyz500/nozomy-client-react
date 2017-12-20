@@ -11,6 +11,7 @@ export default function(state = {}, action) {
         }, {}),
         weekly: _.filter(action.payload.data, {'is_weekly': true})
       };
+      console.log({ ...state, [action.weekStr]: week });
       return { ...state, [action.weekStr]: week };
     default:
       return state;

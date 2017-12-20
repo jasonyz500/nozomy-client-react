@@ -104,6 +104,10 @@ class Home extends Component {
     this.props.fetchWeek(this.state.weekStr);
   }
 
+  addEntry() {
+
+  }
+
   render() {
     const { week } = this.props;
     if (!week) {
@@ -113,7 +117,7 @@ class Home extends Component {
     return (
       <div>
         <Panel>
-          <Button onClick={() => {this.handleArrow(-7)}}><Glyphicon glyph="arrow-left" /> Previous Week</Button>
+          <Button onClick={() => this.handleArrow(-7)}><Glyphicon glyph="arrow-left" /> Previous Week</Button>
           <h1>{this.getPageTitle()}</h1>
           <Button onClick={() => {this.handleArrow(7)}}>Next Week <Glyphicon glyph="arrow-right" /></Button>
         </Panel>
@@ -148,9 +152,10 @@ function getCurrentWeekStr() {
   return moment().startOf('isoWeek').format('YYYY-MM-DD');
 }
 
-function mapStateToProps({ weeks }, ownProps) {
+function mapStateToProps({ entries }, ownProps) {
+  console.log(entries);
   const weekStr = ownProps.match.params.weekStr || getCurrentWeekStr();
-  return { week: weeks[weekStr] };
+  return { week: entries[weekStr] };
 }
 
 export default connect(mapStateToProps, { fetchWeek, addEntry })(Home);

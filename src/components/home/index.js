@@ -26,7 +26,7 @@ class Home extends Component {
     const parsedQuery = queryString.parse(props.location.search);
     this.state = {
       weekStr: parsedQuery.week || getCurrentWeekStr(),
-      selectedDay: parsedQuery.day || (moment().format('d')+6)%7
+      selectedDay: parseInt(parsedQuery.day) || moment().isoWeekday()
     };
   }
 
@@ -38,7 +38,7 @@ class Home extends Component {
     const parsedQuery = queryString.parse(props.location.search);
     this.setState({
       weekStr: parsedQuery.week || getCurrentWeekStr(),
-      selectedDay: parseInt(parsedQuery.day) || (moment().format('d')+6)%7
+      selectedDay: parseInt(parsedQuery.day) || moment().isoWeekday()
     });
   }
 
@@ -57,9 +57,9 @@ class Home extends Component {
   }
 
   drawDayOfWeekTabs() {
-    return _.map(_.range(7), i => {
+    return _.map(_.range(1, 8), i => {
       return (
-        <Tab key={i} eventKey={i} title={days[i]}></Tab>
+        <Tab key={i} eventKey={i} title={days[i-1]}></Tab>
       );
     });
   }
@@ -113,6 +113,8 @@ class Home extends Component {
     if (!week) {
       return (<div>Loading...</div>);
     }
+
+    console.log('state ', this.state);
 
     return (
       <div>

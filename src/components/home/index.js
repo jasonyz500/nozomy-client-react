@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import { Panel, Nav, NavItem, Button, Glyphicon } from 'react-bootstrap'
+import { Panel, Tabs, Tab, Button, Glyphicon } from 'react-bootstrap'
 import moment from 'moment';
 import _ from 'lodash';
 import EntryContainer from './entry-container';
@@ -38,7 +38,7 @@ class Home extends Component {
     const parsedQuery = queryString.parse(props.location.search);
     this.setState({
       weekStr: parsedQuery.week || getCurrentWeekStr(),
-      selectedDay: parsedQuery.day || (moment().format('d')+6)%7
+      selectedDay: parseInt(parsedQuery.day) || (moment().format('d')+6)%7
     });
   }
 
@@ -59,7 +59,7 @@ class Home extends Component {
   drawDayOfWeekTabs() {
     return _.map(_.range(7), i => {
       return (
-        <NavItem key={days[i]} eventKey={i}>{days[i]}</NavItem>
+        <Tab key={i} eventKey={i} title={days[i]}></Tab>
       );
     });
   }
@@ -68,7 +68,7 @@ class Home extends Component {
     return _.map(entries, entry => {
       return (
         <EntryContainer 
-          key={entry._id} 
+          key={entry._id}
           entry={entry}
         />
       );
@@ -116,20 +116,18 @@ class Home extends Component {
 
     return (
       <div>
+        <Button onClick={() => this.handleArrow(-7)}><Glyphicon glyph="arrow-left" /> Previous Week</Button>
+        <h1 className='page-title'>{this.getPageTitle()}</h1>
+        <Button onClick={() => {this.handleArrow(7)}}>Next Week <Glyphicon glyph="arrow-right" /></Button>
         <Panel>
-          <Button onClick={() => this.handleArrow(-7)}><Glyphicon glyph="arrow-left" /> Previous Week</Button>
-          <h1>{this.getPageTitle()}</h1>
-          <Button onClick={() => {this.handleArrow(7)}}>Next Week <Glyphicon glyph="arrow-right" /></Button>
-        </Panel>
-        <Panel>
-          <Nav 
-            bsStyle="tabs" 
+          <Tabs 
+            id="controlled-tab-example"
             activeKey={this.state.selectedDay}
             justified 
             onSelect={this.handleSelectDay.bind(this)}
           >
             {this.drawDayOfWeekTabs()}
-          </Nav>
+          </Tabs>
           {this.drawEntryContainers(week.daily[this.state.selectedDay])}
           <Button 
             onClick={() => this.handleAddEntry(false, this.state.weekStr, this.state.weekStr, this.state.selectedDay)}
@@ -153,7 +151,6 @@ function getCurrentWeekStr() {
 }
 
 function mapStateToProps({ entries }, ownProps) {
-  console.log(entries);
   const weekStr = ownProps.match.params.weekStr || getCurrentWeekStr();
   return { week: entries[weekStr] };
 }

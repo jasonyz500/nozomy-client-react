@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
+import { bindActionCreators } from 'redux';
 import { Panel, Tabs, Tab, Button, Glyphicon } from 'react-bootstrap'
 import moment from 'moment';
 import _ from 'lodash';
@@ -26,7 +27,7 @@ class Home extends Component {
     const parsedQuery = queryString.parse(props.location.search);
     this.state = {
       weekStr: parsedQuery.week || getCurrentWeekStr(),
-      selectedDay: parseInt(parsedQuery.day) || moment().isoWeekday()
+      selectedDay: parseInt(parsedQuery.day, 10) || moment().isoWeekday()
     };
   }
 
@@ -38,13 +39,9 @@ class Home extends Component {
     const parsedQuery = queryString.parse(props.location.search);
     this.setState({
       weekStr: parsedQuery.week || getCurrentWeekStr(),
-      selectedDay: parseInt(parsedQuery.day) || moment().isoWeekday()
+      selectedDay: parseInt(parsedQuery.day, 10) || moment().isoWeekday()
     });
   }
-
-  // componentDidUpdate(prevProps, prevState, prevContext) {
-  //   this.populate(this.state.weekStr);
-  // }
 
   getPageTitle() {
     const { weekStr } = this.state;
@@ -65,11 +62,11 @@ class Home extends Component {
   }
 
   drawEntryContainers(entries) {
-    return _.map(entries, entry => {
+    return _.map(_.range((entries || []).length), i => {
       return (
         <EntryContainer 
-          key={entry._id}
-          entry={entry}
+          key={entries[i]._id || i}
+          entry={entries[i]}
         />
       );
     });
@@ -90,7 +87,6 @@ class Home extends Component {
     this.props.history.push({
       search: `?week=${this.state.weekStr}&day=${selectedDay}`
     });
-    // this.setState({ selectedDay });
   }
 
   handleArrow(diff) {
@@ -98,14 +94,7 @@ class Home extends Component {
     this.props.history.push({
       search: `?week=${newWeekStr}&day=${this.state.selectedDay}`
     });
-    // this.setState({
-    //   weekStr: moment(this.state.weekStr).add(diff, 'days').format('YYYY-MM-DD')
-    // });
     this.props.fetchWeek(this.state.weekStr);
-  }
-
-  addEntry() {
-
   }
 
   render() {
@@ -113,8 +102,6 @@ class Home extends Component {
     if (!week) {
       return (<div>Loading...</div>);
     }
-
-    console.log('state ', this.state);
 
     return (
       <div>
@@ -132,15 +119,15 @@ class Home extends Component {
           </Tabs>
           {this.drawEntryContainers(week.daily[this.state.selectedDay])}
           <Button 
-            onClick={() => this.handleAddEntry(false, this.state.weekStr, this.state.weekStr, this.state.selectedDay)}
+            onClick={() => this.handleAddEntry(false, this.state.weekStr, moment(this.state.weekStr).add(this.state.selectedDay-1, 'days').format('YYYY-MM-DD'), this.state.selectedDay)}
           >
-            Add New Entry <Glyphicon glyph="plus" />
+            Add New Entry For Today <Glyphicon glyph="plus" />
           </Button>
           {this.drawEntryContainers(week.weekly)}
           <Button
-            onClick={() => this.handleAddEntry(false, this.state.weekStr, null, null)}
+            onClick={() => this.handleAddEntry(true, this.state.weekStr, null, null)}
           >
-            Add New Entry <Glyphicon glyph="plus" />
+            Add New Entry For This Week <Glyphicon glyph="plus" />
           </Button>
         </Panel>
       </div>
@@ -153,8 +140,13 @@ function getCurrentWeekStr() {
 }
 
 function mapStateToProps({ entries }, ownProps) {
-  const weekStr = ownProps.match.params.weekStr || getCurrentWeekStr();
+  const parsedQuery = queryString.parse(ownProps.location.search);
+  const weekStr = parsedQuery.week || getCurrentWeekStr();
   return { week: entries[weekStr] };
 }
 
-export default connect(mapStateToProps, { fetchWeek, addEntry })(Home);
+function mapDispatchToProps(dispatch) {
+  return bindActionCreators({fetchWeek: fetchWeek, addEntry: addEntry}, dispatch);
+}
+
+export default connect(mapStateToProps, mapDispatchToProps)(Home);

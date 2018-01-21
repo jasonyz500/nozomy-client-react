@@ -1,6 +1,8 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import { updateEntry } from '../../actions';
+import { Field, reduxForm } from 'redux-form';
+import { Button } from 'react-bootstrap'
+import { createEntry, updateEntry } from '../../actions';
 
 class EntryContainer extends Component {
   constructor(props) {
@@ -11,9 +13,23 @@ class EntryContainer extends Component {
   }
 
   onTextChange(fieldName, newContent) {
-    const entry = this.state.entry;
+    const { entry } = this.state;
     entry[fieldName] = newContent;
     this.setState({ entry });
+  }
+
+  handleSave() {
+    const { entry } = this.state;
+    if (entry._id) {
+      this.props.updateEntry(entry);
+      console.log('successfully saved entry with id ' + entry._id);
+    } else {
+      this.props.createEntry(entry, (_id) => {
+        entry._id = _id;
+        this.setState({ entry });
+        console.log('successfully created entry with id ', _id);
+      });
+    }
   }
 
   render() {
@@ -38,9 +54,10 @@ class EntryContainer extends Component {
         >
           {this.state.entry.body}
         </textarea>
+        <Button type="submit" className="btn btn-success" onClick={this.handleSave.bind(this)}>Save</Button>
       </div>
     );
   }
 }
 
-export default connect(null, { updateEntry })(EntryContainer);
+export default connect(null, { createEntry, updateEntry })(EntryContainer);

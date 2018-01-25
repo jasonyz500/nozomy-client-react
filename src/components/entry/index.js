@@ -4,7 +4,7 @@ import { Field, reduxForm } from 'redux-form';
 import { Button } from 'react-bootstrap'
 import { createEntry, updateEntry } from '../../actions';
 
-class EntryContainer extends Component {
+class Entry extends Component {
   constructor(props) {
     super(props);
     this.state = {
@@ -60,4 +60,4 @@ class EntryContainer extends Component {
   }
 }
 
-export default connect(null, { createEntry, updateEntry })(EntryContainer);
+export default connect(null, { createEntry, updateEntry })(Entry);

@@ -1,5 +1,5 @@
 import _ from 'lodash';
-import { FETCH_WEEK, ADD_ENTRY, CREATE_ENTRY, UPDATE_ENTRY } from '../actions';
+import { FETCH_WEEK, FETCH_ALL, ADD_ENTRY, CREATE_ENTRY, UPDATE_ENTRY } from '../actions';
 
 export default function(state = {}, action) {
   switch (action.type) {
@@ -27,6 +27,8 @@ export default function(state = {}, action) {
         state[week_string].daily[day_of_week_iso].push(action.entry);
         return state;
       }
+    case FETCH_ALL:
+      return action.payload.data
     case CREATE_ENTRY:
       return state;
     case UPDATE_ENTRY:

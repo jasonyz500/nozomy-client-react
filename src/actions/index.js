@@ -1,6 +1,7 @@
 import axios from 'axios';
 
 export const FETCH_WEEK = 'fetch_week';
+export const FETCH_ALL = 'fetch_all';
 export const ADD_ENTRY = 'add_entry';
 export const CREATE_ENTRY = 'create_entry';
 export const UPDATE_ENTRY = 'update_entry';
@@ -17,6 +18,15 @@ export function fetchWeek(weekStr) {
 
   return {
     type: FETCH_WEEK,
+    payload: request
+  }
+}
+
+export function fetchAll() {
+  const request = axios.get(`${ROOT_URL}/entries/all`);
+
+  return {
+    type: FETCH_ALL,
     payload: request
   }
 }

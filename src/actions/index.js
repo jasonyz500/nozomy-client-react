@@ -1,10 +1,11 @@
 import axios from 'axios';
 
-export const FETCH_WEEK = 'fetch_week';
 export const FETCH_ALL = 'fetch_all';
-export const ADD_ENTRY = 'add_entry';
+export const FETCH_ENTRY = 'fetch_entry';
 export const CREATE_ENTRY = 'create_entry';
 export const UPDATE_ENTRY = 'update_entry';
+export const DELETE_ENTRY = 'delete_entry';
+// export const FETCH_WEEK = 'fetch_week';
 
 const ROOT_URL = 'http://localhost:3000';
 const CONFIG = {
@@ -12,15 +13,6 @@ const CONFIG = {
     'Content-Type': 'application/json'
   }
 };
-
-export function fetchWeek(weekStr) {
-  const request = axios.get(`${ROOT_URL}/entries/week/${weekStr}`);
-
-  return {
-    type: FETCH_WEEK,
-    payload: request
-  }
-}
 
 export function fetchAll() {
   const request = axios.get(`${ROOT_URL}/entries/all`);
@@ -31,10 +23,12 @@ export function fetchAll() {
   }
 }
 
-export function addEntry(entry) {
+export function fetchEntry(_id) {
+  const request = axios.get(`${ROOT_URL}/entries/${_id}`);
+
   return {
-    type: ADD_ENTRY,
-    entry: entry
+    type: FETCH_ENTRY,
+    payload: request
   }
 }
 
@@ -55,3 +49,12 @@ export function updateEntry(entry) {
     payload: request
   }
 }
+
+// export function fetchWeek(weekStr) {
+//   const request = axios.get(`${ROOT_URL}/entries/week/${weekStr}`);
+
+//   return {
+//     type: FETCH_WEEK,
+//     payload: request
+//   }
+// }

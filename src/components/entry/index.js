@@ -1,15 +1,17 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import { Field, reduxForm } from 'redux-form';
+// import { Field, reduxForm } from 'redux-form';
 import { Button } from 'react-bootstrap'
 
 import { EntryModel } from './entry-model';
-import { createEntry, updateEntry } from '../../actions';
+import { fetchEntry, createEntry, updateEntry } from '../../actions';
 
 class Entry extends Component {
   componentDidMount() {
     const { id } = this.props.match.params;
-    // this.props.fetchEntry(id);
+    if (id) {
+      this.props.fetchEntry(id);
+    }
   }
 
   onTextChange(fieldName, newContent) {
@@ -39,8 +41,8 @@ class Entry extends Component {
           className="form-control"
           placeholder="headline"
           onChange={event => this.onTextChange("headline", event.target.value)}
+          value={entry.headline}
         >
-          {entry.headline}
         </textarea>
         <input
           placeholder="add some tags..."
@@ -50,8 +52,8 @@ class Entry extends Component {
           className="form-control"
           placeholder="body"
           onChange={event => this.onTextChange("body", event.target.value)}
+          value={entry.body}
         >
-          {entry.body}
         </textarea>
         <Button type="submit" className="btn btn-success" onClick={this.handleSave.bind(this)}>Save</Button>
       </div>
@@ -63,4 +65,4 @@ function mapStateToProps({ entries }, ownProps) {
   return { entry: entries[ownProps.match.params.id] || new EntryModel({}) };
 }
 
-export default connect(mapStateToProps, { createEntry, updateEntry })(Entry);
+export default connect(mapStateToProps, { fetchEntry, createEntry, updateEntry })(Entry);

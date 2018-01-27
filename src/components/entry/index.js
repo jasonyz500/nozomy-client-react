@@ -2,37 +2,36 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { Field, reduxForm } from 'redux-form';
 import { Button } from 'react-bootstrap'
+
+import { EntryModel } from './entry-model';
 import { createEntry, updateEntry } from '../../actions';
 
 class Entry extends Component {
-  constructor(props) {
-    super(props);
-    this.state = {
-      entry: props.entry
-    }
+  componentDidMount() {
+    const { id } = this.props.match.params;
+    // this.props.fetchEntry(id);
   }
 
   onTextChange(fieldName, newContent) {
-    const { entry } = this.state;
+    const { entry } = this.props;
     entry[fieldName] = newContent;
-    this.setState({ entry });
   }
 
   handleSave() {
-    const { entry } = this.state;
+    const { entry } = this.props;
     if (entry._id) {
       this.props.updateEntry(entry);
       console.log('successfully saved entry with id ' + entry._id);
     } else {
       this.props.createEntry(entry, (_id) => {
         entry._id = _id;
-        this.setState({ entry });
         console.log('successfully created entry with id ', _id);
       });
     }
   }
 
   render() {
+    let { entry } = this.props;
     return (
       <div className="form-group">
         <textarea
@@ -41,7 +40,7 @@ class Entry extends Component {
           placeholder="headline"
           onChange={event => this.onTextChange("headline", event.target.value)}
         >
-          {this.state.entry.headline}
+          {entry.headline}
         </textarea>
         <input
           placeholder="add some tags..."
@@ -52,7 +51,7 @@ class Entry extends Component {
           placeholder="body"
           onChange={event => this.onTextChange("body", event.target.value)}
         >
-          {this.state.entry.body}
+          {entry.body}
         </textarea>
         <Button type="submit" className="btn btn-success" onClick={this.handleSave.bind(this)}>Save</Button>
       </div>
@@ -60,4 +59,8 @@ class Entry extends Component {
   }
 }
 
-export default connect(null, { createEntry, updateEntry })(Entry);
+function mapStateToProps({ entries }, ownProps) {
+  return { entry: entries[ownProps.match.params.id] || new EntryModel({}) };
+}
+
+export default connect(mapStateToProps, { createEntry, updateEntry })(Entry);

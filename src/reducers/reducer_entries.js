@@ -28,7 +28,7 @@ export default function(state = {}, action) {
         return state;
       }
     case FETCH_ALL:
-      return action.payload.data
+      return _.mapKeys(action.payload.data, '_id');
     case CREATE_ENTRY:
       return state;
     case UPDATE_ENTRY:

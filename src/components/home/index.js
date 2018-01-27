@@ -35,7 +35,6 @@ class Home extends Component {
 }
 
 function mapStateToProps(state) {
-    console.log(state);
   return { entries: state.entries };
 }
 

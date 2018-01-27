@@ -17,13 +17,15 @@ class Entry extends Component {
   onTextChange(fieldName, newContent) {
     const { entry } = this.props;
     entry[fieldName] = newContent;
+    this.setState({});
   }
 
   handleSave() {
     const { entry } = this.props;
     if (entry._id) {
-      this.props.updateEntry(entry);
-      console.log('successfully saved entry with id ' + entry._id);
+      this.props.updateEntry(entry, () => {
+        console.log('successfully saved entry with id ' + entry._id);
+      });
     } else {
       this.props.createEntry(entry, (_id) => {
         entry._id = _id;

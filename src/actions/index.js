@@ -41,8 +41,8 @@ export function createEntry(entry, callback) {
   }
 }
 
-export function updateEntry(entry) {
-  const request = axios.patch(`${ROOT_URL}/entries/${entry._id}`, JSON.stringify(entry), CONFIG);
+export function updateEntry(entry, callback) {
+  const request = axios.patch(`${ROOT_URL}/entries/${entry._id}`, JSON.stringify(entry), CONFIG).then((resp) => callback());
 
   return {
     type: UPDATE_ENTRY,

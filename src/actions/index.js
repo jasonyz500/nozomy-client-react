@@ -50,6 +50,15 @@ export function updateEntry(entry) {
   }
 }
 
+export function deleteEntry(_id, callback) {
+  const request = axios.delete(`${ROOT_URL}/entries/${_id}`).then(() => callback());
+
+  return {
+    type: DELETE_ENTRY,
+    payload: _id
+  }
+}
+
 // export function fetchWeek(weekStr) {
 //   const request = axios.get(`${ROOT_URL}/entries/week/${weekStr}`);
 

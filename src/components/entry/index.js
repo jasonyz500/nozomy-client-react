@@ -4,7 +4,7 @@ import { connect } from 'react-redux';
 import { Button } from 'react-bootstrap'
 
 import { EntryModel } from './entry-model';
-import { fetchEntry, createEntry, updateEntry } from '../../actions';
+import { fetchEntry, createEntry, updateEntry, deleteEntry } from '../../actions';
 
 class Entry extends Component {
   componentDidMount() {
@@ -32,6 +32,16 @@ class Entry extends Component {
     }
   }
 
+  handleDelete() {
+    const { entry } = this.props;
+    if (entry._id) {
+      this.props.deleteEntry(entry._id, () => {
+          this.props.history.push('/');
+        }
+      )
+    }
+  }
+
   render() {
     let { entry } = this.props;
     return (
@@ -56,6 +66,7 @@ class Entry extends Component {
         >
         </textarea>
         <Button type="submit" className="btn btn-success" onClick={this.handleSave.bind(this)}>Save</Button>
+        <Button className="btn btn-danger" onClick={this.handleDelete.bind(this)}>Delete</Button>
       </div>
     );
   }
@@ -65,4 +76,4 @@ function mapStateToProps({ entries }, ownProps) {
   return { entry: entries[ownProps.match.params.id] || new EntryModel({}) };
 }
 
-export default connect(mapStateToProps, { fetchEntry, createEntry, updateEntry })(Entry);
+export default connect(mapStateToProps, { fetchEntry, createEntry, updateEntry, deleteEntry })(Entry);

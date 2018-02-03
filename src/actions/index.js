@@ -55,7 +55,7 @@ export function deleteEntry(_id, callback) {
 
   return {
     type: DELETE_ENTRY,
-    payload: _id
+    payload: request
   }
 }
 

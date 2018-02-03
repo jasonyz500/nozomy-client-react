@@ -32,11 +32,13 @@ class Entry extends Component {
     if (entry._id) {
       this.props.updateEntry(entry, () => {
         console.log('successfully saved entry with id ' + entry._id);
+        this.props.history.push('/');
       });
     } else {
       this.props.createEntry(entry, (_id) => {
         entry._id = _id;
         console.log('successfully created entry with id ', _id);
+        this.props.history.push('/');
       });
     }
   }
@@ -48,13 +50,16 @@ class Entry extends Component {
           this.props.history.push('/');
         }
       )
+    } else {
+      this.props.history.push('/');
     }
   }
 
   handleDateSelect(date) {
     let { entry } = this.props;
-    entry.date_string = date;
-    this.setState({})
+    entry.date_string = date.format('YYYY-MM-DD');
+    console.log(entry);
+    this.setState({});
   }
 
   handleDeleteTag(i) {

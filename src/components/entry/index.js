@@ -1,7 +1,14 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 // import { Field, reduxForm } from 'redux-form';
-import { Button } from 'react-bootstrap'
+import { Button } from 'react-bootstrap';
+import { WithContext as ReactTags } from 'react-tag-input';
+import DatePicker from 'react-datepicker';
+import moment from 'moment';
+import _ from 'lodash';
+
+import 'react-datepicker/dist/react-datepicker.css';
+import './react-tags.css';
 
 import { EntryModel } from './entry-model';
 import { fetchEntry, createEntry, updateEntry, deleteEntry } from '../../actions';
@@ -44,10 +51,34 @@ class Entry extends Component {
     }
   }
 
+  handleDateSelect(date) {
+    let { entry } = this.props;
+    entry.date_string = date;
+    this.setState({})
+  }
+
+  handleDeleteTag(i) {
+    let { entry } = this.props;
+    let tags = entry.tags;
+    tags.splice(i, 1);
+    entry.tags = tags;
+    this.setState({});
+  }
+
+  handleAdditionTag(tag) {
+    let { entry } = this.props;
+    entry.tags.push(tag)
+    this.setState({});
+  }
+
   render() {
     let { entry } = this.props;
     return (
       <div className="form-group">
+        <DatePicker
+          selected={moment(entry.date_string) || moment()}
+          onChange={this.handleDateSelect.bind(this)}
+        />
         <textarea
           rows="2"
           className="form-control"
@@ -56,8 +87,10 @@ class Entry extends Component {
           value={entry.headline}
         >
         </textarea>
-        <input
-          placeholder="add some tags..."
+        <ReactTags
+          tags={_.map(entry.tags, (tag, idx)=>{return {id:idx, text:tag}})}
+          handleDelete={this.handleDeleteTag.bind(this)}
+          handleAddition={this.handleAdditionTag.bind(this)}
         />
         <textarea
           rows="7"

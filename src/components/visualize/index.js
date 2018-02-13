@@ -25,8 +25,20 @@ class Visualize extends Component {
         <div key={quarter} className="week-row">
           {
             _.map(quarter, weekStr => {
+              let weekClassName;
+              const m = moment(weekStr);
+
+              if (m.isBefore(moment().startOf('isoWeek'))) {
+                weekClassName = 'past-week';
+              } else if (m.isSame(moment().startOf('isoWeek'))) {
+                weekClassName = 'current-week';
+              } else {
+                weekClassName = 'future-week';
+              }
+
+              const classNames = `dot ${weekClassName}`;
               return (
-                <span key={weekStr} className="dot">
+                <span key={weekStr} className={classNames}>
                 </span>
               );
             })
@@ -39,7 +51,7 @@ class Visualize extends Component {
   render() {
     return (
       <div>
-        <h3>We are here</h3>
+        <h2>We are <span className="title-accent">here</span></h2>
         <div>
           {this.drawCurrentYearInQuarters()}
         </div>

@@ -1,7 +1,27 @@
+.title-accent {
+  color: #FD8182;
+}
+
+.week-row {
+  width: 100%;
+}
+
 .dot {
-  height: 25px;
-  width: 25px;
-  background-color: #bbb;
+  height: 40px;
+  width: 40px;
+  background: #bbb;
   border-radius: 50%;
   display: inline-block;
+}
+
+.past-week {
+  background: #084D8F;
+}
+
+.current-week {
+  background: #FD8182;
+}
+
+.future-week {
+  background: #A1C9FD;
 }

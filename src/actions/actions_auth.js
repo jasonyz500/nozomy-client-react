@@ -9,8 +9,9 @@ const CONFIG = {
   }
 };
 
-export function login(email, password, callback) {
-  const request = axios.post(`${ROOT_URL}/login`, { email, password }, CONFIG).then((resp) => callback(resp));
+export async function login(email, password, callback) {
+  const request = await axios.post(`${ROOT_URL}/login`, { email, password }, CONFIG);
+  callback(request);
 
   return {
     type: LOGIN,

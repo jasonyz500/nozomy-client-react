@@ -37,7 +37,7 @@ export function fetchEntry(_id) {
 }
 
 export function createEntry(entry, callback) {
-  const request = axios.post(`${ROOT_URL}/entries/new`, JSON.stringify(entry), getConfig()).then((resp) => callback(resp.data));
+  const request = axios.post(`${ROOT_URL}/entries/new`, entry, getConfig()).then((resp) => callback(resp.data));
 
   return {
     type: CREATE_ENTRY,
@@ -46,7 +46,7 @@ export function createEntry(entry, callback) {
 }
 
 export function updateEntry(entry, callback) {
-  const request = axios.patch(`${ROOT_URL}/entries/${entry._id}`, JSON.stringify(entry), getConfig()).then((resp) => callback());
+  const request = axios.patch(`${ROOT_URL}/entries/${entry._id}`, entry, getConfig()).then((resp) => callback());
 
   return {
     type: UPDATE_ENTRY,

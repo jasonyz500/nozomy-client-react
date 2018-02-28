@@ -5,6 +5,8 @@
   "dependencies": {
     "axios": "^0.16.2",
     "bootstrap": "^3.3.7",
+    "jsonwebtoken": "^8.1.1",
+    "jwt-decode": "^2.2.0",
     "lodash": "^4.17.4",
     "moment": "^2.18.1",
     "query-string": "^5.0.0",

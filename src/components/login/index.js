@@ -7,7 +7,6 @@ class Login extends Component {
   submit = (values) => {
     this.props.login(values.email, values.password, (resp) => {
       console.log('response:', resp);
-      localStorage.setItem('auth_token', resp.data);
     });
   }
 
@@ -40,6 +39,7 @@ class Login extends Component {
             />
             <button type="submit" className="blue">Log In</button>
           </form>
+          {this.errorMessage()}
         </div>
       </div>
     );

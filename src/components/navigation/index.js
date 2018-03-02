@@ -14,7 +14,6 @@ const Navigation = () => (
     <Nav bsStyle="pills">
       <NavItem href='/'>Home</NavItem>
       <NavItem href='/visualize'>Visualize</NavItem>
-      <NavItem href='/root'>Root</NavItem>
     </Nav>
   </Navbar>
 )

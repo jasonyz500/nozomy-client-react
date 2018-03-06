@@ -58,7 +58,6 @@ class Entry extends Component {
   handleDateSelect(date) {
     let { entry } = this.props;
     entry.date_string = date.format('YYYY-MM-DD');
-    console.log(entry);
     this.setState({});
   }
 

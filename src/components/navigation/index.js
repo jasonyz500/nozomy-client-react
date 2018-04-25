@@ -1,6 +1,6 @@
 import React from 'react'
 import { Link } from 'react-router-dom'
-import { Navbar, Nav, NavItem } from 'react-bootstrap';
+import { Navbar, Nav, NavItem, NavDropdown, MenuItem } from 'react-bootstrap';
 
 // import './navigation.css';
 
@@ -14,6 +14,13 @@ const Navigation = () => (
     <Nav bsStyle="pills">
       <NavItem href='/'>Home</NavItem>
       <NavItem href='/visualize'>Visualize</NavItem>
+    </Nav>
+    <Nav pullRight>
+      <NavDropdown title={localStorage.getItem('name').split(' ')[0] || ''} id="user-dropdown">
+        <MenuItem>Profile</MenuItem>
+        <MenuItem divider />
+        <MenuItem>Logout</MenuItem>
+      </NavDropdown>
     </Nav>
   </Navbar>
 )

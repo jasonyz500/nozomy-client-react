@@ -10,7 +10,7 @@ const CONFIG = {
   }
 };
 
-export async function login(email, password, callback) {
+export async function login(email, password) {
   try {
     const request = await axios.post(`${ROOT_URL}/login`, { email, password }, CONFIG);
     return {

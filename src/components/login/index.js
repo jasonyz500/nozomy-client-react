@@ -5,9 +5,7 @@ import { login } from '../../actions';
 
 class Login extends Component {
   submit = (values) => {
-    this.props.login(values.email, values.password, (resp) => {
-      console.log('response:', resp);
-    });
+    this.props.login(values.email, values.password);
   }
 
   errorMessage() {

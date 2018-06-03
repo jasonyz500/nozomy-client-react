@@ -1,20 +1,14 @@
 import React, { Component } from 'react';
-import { connect } from 'react-redux';
 import { Field, reduxForm } from 'redux-form';
-import { login } from '../../actions';
+import AuthService from '../auth-service';
+import './login.css';
+
+const authService = new AuthService();
 
 class Login extends Component {
-  submit = (values) => {
-    this.props.login(values.email, values.password);
-  }
-
-  errorMessage() {
-    if (this.props.errorMessage) {
-      return (
-        <div className="info-red">
-          {this.props.errorMessage}
-        </div>
-      );
+  componentWillMount(){
+    if (authService.isLoggedIn()) {
+      this.props.history.replace('/');
     }
   }
 
@@ -23,7 +17,7 @@ class Login extends Component {
     return (
       <div className="form">
         <div className="container">
-          <h2>Log In</h2>
+          <h2>Sign In</h2>
           <form onSubmit={ handleSubmit(this.submit) }>
             <Field name="email"
                   component="input"
@@ -35,21 +29,23 @@ class Login extends Component {
                   type="password" 
                   placeholder="Password" 
             />
-            <button type="submit" className="blue">Log In</button>
+            <button type="submit" className="blue">Sign In</button>
           </form>
-          {this.errorMessage()}
         </div>
       </div>
     );
   }
+
+  async submit (values) {
+    const res = await authService.login(values.email, values.password);
+    if (res) {
+      window.location.reload();
+    } else {
+      this.setState({ error: true });
+    }
+  }
 }
 
-function mapStateToProps({ auth }) {
-  return { errorMessage: auth.error };
-}
-
-const reduxFormLogin = reduxForm({
+export default reduxForm({
   form: 'login'
 })(Login);
-
-export default connect(mapStateToProps, { login })(reduxFormLogin);

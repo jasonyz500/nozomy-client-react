@@ -4,9 +4,12 @@ import { Navbar, Nav, NavItem, NavDropdown, MenuItem } from 'react-bootstrap';
 import AuthService from '../auth-service';
 // import './navigation.css';
 
+const authService = new AuthService();
+
 class Navigation extends Component {
   handleLogout() {
-    AuthService.logout();
+    authService.logout();
+    window.location.reload();
   }
 
   render() {

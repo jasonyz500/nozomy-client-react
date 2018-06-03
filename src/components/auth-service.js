@@ -1,23 +1,42 @@
 import decode from 'jwt-decode';
-import createHistory from 'history/createBrowserHistory';
+import axios from 'axios';
 
-const history = createHistory();
+const ROOT_URL = 'http://localhost:3000';
+const CONFIG = {
+  headers: {
+    'Content-Type': 'application/json'
+  }
+};
 
 export default class AuthService {
-
-  isLoggedIn() {
-    let expiresAt = JSON.parse(localStorage.getItem('expires_at'));
-    return new Date().getTime() < expiresAt;
-  }
-
-  login(authToken, path) {
-    localStorage.setItem('auth_token', authToken);
-    history.replace(`/${path}`);
+  async login(email, password) {
+    try {
+      const request = await axios.post(`${ROOT_URL}/login`, { email, password }, CONFIG);
+      const authToken = request.data;
+      localStorage.setItem('auth_token', authToken);
+      localStorage.setItem('expires_at', decode(authToken).exp);
+      return true;
+    } catch (error) {
+      return false;
+    }
   }
 
   logout() {
     localStorage.removeItem('auth_token');
     localStorage.removeItem('expires_at');
-    history.replace('/login');
   }
+
+  getProfile() {
+    return decode(localStorage.getItem('auth_token'));
+  }
+
+  isLoggedIn() {
+    try {
+      const expiresAt = JSON.parse(localStorage.getItem('expires_at')) * 1000;
+      return new Date().getTime() < expiresAt;
+    } catch (error) {
+      return false;
+    }
+  }
+
 }

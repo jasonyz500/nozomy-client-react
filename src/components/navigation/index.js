@@ -4,9 +4,12 @@ import { Navbar, Nav, NavItem, NavDropdown, MenuItem } from 'react-bootstrap';
 import AuthService from '../auth-service';
 // import './navigation.css';
 
+const authService = new AuthService();
+
 class Navigation extends Component {
   handleLogout() {
-    AuthService.logout();
+    authService.logout();
+    window.location.reload();
   }
 
   render() {
@@ -22,7 +25,7 @@ class Navigation extends Component {
           <NavItem href='/visualize'>Visualize</NavItem>
         </Nav>
         <Nav pullRight>
-          <NavDropdown title={(localStorage.getItem('name') || '').split(' ')[0]} id="user-dropdown">
+          <NavDropdown title={authService.getProfile().name || ''} id="user-dropdown">
             <MenuItem>Profile</MenuItem>
             <MenuItem divider />
             <MenuItem onClick={this.handleLogout}>Logout</MenuItem>

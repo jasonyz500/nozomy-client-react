@@ -21,16 +21,18 @@ class WeekDot extends Component {
   //   const { weekStr } = this.props;
   // }
 
-  getTitleFromWeekStr(weekStr) {
+  getModalTitle() {
+    const { weekStr } = this.props;
     const m = moment(weekStr);
-    const startDate = `${m.month()} ${m.date()}`;
-    const n = m.endOf('isoWeek');
-    const endDate = `${m.month() === n.month() ? '' : n.month() + ' '}${n.date()}`;
-    return {
-      year: m.year(),
-      weekNo: m.isoWeekYear(),
-      displayWeek: `${startDate} - ${endDate}`
+    const n = moment(weekStr).endOf('isoWeek');
+    const startDate = m.format('MMMM D');
+    let endDate;
+    if (m.month() === n.month()) {
+      endDate = n.format('D');
+    } else {
+      endDate = n.format('MMMM D');
     }
+    return `${startDate} - ${endDate} // ${m.year()} week ${m.isoWeek()}`;
   }
 
   handleClose() {
@@ -42,9 +44,9 @@ class WeekDot extends Component {
   }
 
   render() {
+    // calculate class name for dot
     let weekClassName;
     const m = moment(this.props.weekStr);
-
     if (m.isBefore(moment().startOf('isoWeek'))) {
       weekClassName = 'past-week';
     } else if (m.isSame(moment().startOf('isoWeek'))) {
@@ -52,8 +54,8 @@ class WeekDot extends Component {
     } else {
       weekClassName = 'future-week';
     }
-
     const classNames = `dot ${weekClassName}`;
+
     return (
       <div>
         <span 
@@ -63,7 +65,7 @@ class WeekDot extends Component {
         </span>
         <Modal show={this.state.show} onHide={this.handleClose}>
           <Modal.Header closeButton>
-            <Modal.Title>Modal heading</Modal.Title>
+            <Modal.Title>{this.getModalTitle()}</Modal.Title>
           </Modal.Header>
           <Modal.Footer>
             <Button onClick={this.handleClose}>Close</Button>

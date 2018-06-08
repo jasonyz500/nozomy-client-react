@@ -1,14 +1,25 @@
 import React, { Component } from 'react';
+import { Button, Modal } from 'react-bootstrap';
 import { connect } from 'react-redux';
 import moment from 'moment';
-import _ from 'lodash';
 
 import './visualize.css';
 
 class WeekDot extends Component {
-  componentDidMount() {
-    const { weekStr } = this.props;
+  constructor(props, context) {
+    super(props, context);
+
+    this.handleShow = this.handleShow.bind(this);
+    this.handleClose = this.handleClose.bind(this);
+
+    this.state = {
+      show: false
+    };
   }
+
+  // componentDidMount() {
+  //   const { weekStr } = this.props;
+  // }
 
   getTitleFromWeekStr(weekStr) {
     const m = moment(weekStr);
@@ -20,6 +31,14 @@ class WeekDot extends Component {
       weekNo: m.isoWeekYear(),
       displayWeek: `${startDate} - ${endDate}`
     }
+  }
+
+  handleClose() {
+    this.setState({ show: false });
+  }
+
+  handleShow() {
+    this.setState({ show: true });
   }
 
   render() {
@@ -36,10 +55,21 @@ class WeekDot extends Component {
 
     const classNames = `dot ${weekClassName}`;
     return (
-      <span 
-        className={classNames}
-      >  
-      </span>
+      <div>
+        <span 
+          className={classNames}
+          onClick={this.handleShow}
+        >
+        </span>
+        <Modal show={this.state.show} onHide={this.handleClose}>
+          <Modal.Header closeButton>
+            <Modal.Title>Modal heading</Modal.Title>
+          </Modal.Header>
+          <Modal.Footer>
+            <Button onClick={this.handleClose}>Close</Button>
+          </Modal.Footer>
+        </Modal>
+      </div>
     );
   }
 }

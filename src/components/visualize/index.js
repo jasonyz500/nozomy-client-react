@@ -2,6 +2,8 @@ import React, { Component } from 'react';
 import moment from 'moment';
 import _ from 'lodash';
 
+import WeekDot from './week-dot';
+
 import './visualize.css';
 
 class Visualize extends Component {
@@ -25,21 +27,12 @@ class Visualize extends Component {
         <div key={quarter} className="week-row">
           {
             _.map(quarter, weekStr => {
-              let weekClassName;
-              const m = moment(weekStr);
-
-              if (m.isBefore(moment().startOf('isoWeek'))) {
-                weekClassName = 'past-week';
-              } else if (m.isSame(moment().startOf('isoWeek'))) {
-                weekClassName = 'current-week';
-              } else {
-                weekClassName = 'future-week';
-              }
-
-              const classNames = `dot ${weekClassName}`;
               return (
-                <span key={weekStr} className={classNames}>
-                </span>
+                <WeekDot
+                  key={weekStr}
+                  weekStr={weekStr}
+                >
+                </WeekDot>
               );
             })
           }

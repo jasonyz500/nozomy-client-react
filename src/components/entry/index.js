@@ -71,7 +71,7 @@ class Entry extends Component {
 
   handleAdditionTag(tag) {
     let { entry } = this.props;
-    entry.tags.push(tag)
+    entry.tags.push(tag.text)
     this.setState({});
   }
 
@@ -92,7 +92,7 @@ class Entry extends Component {
         >
         </textarea>
         <ReactTags
-          tags={_.map(entry.tags, (tag, idx)=>{return {id:idx, text:tag}})}
+          tags={_.map(entry.tags, (tag, idx)=>{return {id:`${idx}`, text:tag}})}
           handleDelete={this.handleDeleteTag.bind(this)}
           handleAddition={this.handleAdditionTag.bind(this)}
         />

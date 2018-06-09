@@ -3,6 +3,9 @@ import { Button, Modal } from 'react-bootstrap';
 import { connect } from 'react-redux';
 import moment from 'moment';
 
+import { fetchEntriesWithQuery } from '../../actions';
+
+
 import './visualize.css';
 
 class WeekDot extends Component {
@@ -16,10 +19,6 @@ class WeekDot extends Component {
       show: false
     };
   }
-
-  // componentDidMount() {
-  //   const { weekStr } = this.props;
-  // }
 
   getModalTitle() {
     const { weekStr } = this.props;
@@ -40,6 +39,9 @@ class WeekDot extends Component {
   }
 
   handleShow() {
+    const startDate = this.props.weekStr;
+    const endDate = moment(startDate).endOf('isoWeek').format('YYYY-MM-DD');
+    this.props.fetchEntriesWithQuery(startDate, endDate, false);
     this.setState({ show: true });
   }
 
@@ -63,10 +65,20 @@ class WeekDot extends Component {
           onClick={this.handleShow}
         >
         </span>
-        <Modal show={this.state.show} onHide={this.handleClose}>
+        <Modal 
+          show={this.state.show}
+          onHide={this.handleClose}
+          bsSize="large"
+        >
           <Modal.Header closeButton>
             <Modal.Title>{this.getModalTitle()}</Modal.Title>
           </Modal.Header>
+          <Modal.Body>
+            Weekly Entries
+          </Modal.Body>
+          <Modal.Body>
+            Daily Entries
+          </Modal.Body>
           <Modal.Footer>
             <Button onClick={this.handleClose}>Close</Button>
           </Modal.Footer>
@@ -80,4 +92,4 @@ function mapStateToProps({ week }, ownProps) {
   return {};
 }
 
-export default connect(mapStateToProps)(WeekDot);
+export default connect(mapStateToProps, { fetchEntriesWithQuery })(WeekDot);

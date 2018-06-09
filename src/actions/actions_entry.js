@@ -1,6 +1,7 @@
 import axios from 'axios';
 
 export const FETCH_ALL = 'fetch_all';
+export const FETCH_ENTRIES_WITH_QUERY = 'fetch_entries_with_query';
 export const FETCH_ENTRY = 'fetch_entry';
 export const CREATE_ENTRY = 'create_entry';
 export const UPDATE_ENTRY = 'update_entry';
@@ -23,6 +24,15 @@ export function fetchAll() {
 
   return {
     type: FETCH_ALL,
+    payload: request
+  }
+}
+
+export function fetchEntriesWithQuery(startDate, endDate, isWeekly) {
+  const request = axios.get(`${ROOT_URL}/entries?start_date=${startDate}&end_date=${endDate}&is_weekly=${isWeekly}`, getConfig());
+
+  return {
+    type: FETCH_ENTRIES_WITH_QUERY,
     payload: request
   }
 }
@@ -62,12 +72,3 @@ export function deleteEntry(_id, callback) {
     payload: request
   }
 }
-
-// export function fetchWeek(weekStr) {
-//   const request = axios.get(`${ROOT_URL}/entries/week/${weekStr}`);
-
-//   return {
-//     type: FETCH_WEEK,
-//     payload: request
-//   }
-// }

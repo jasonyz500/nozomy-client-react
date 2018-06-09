@@ -1,10 +1,13 @@
 import _ from 'lodash';
-import { FETCH_ALL, FETCH_ENTRY, DELETE_ENTRY } from '../actions';
+import { FETCH_ALL, FETCH_ENTRIES_WITH_QUERY, FETCH_ENTRY, DELETE_ENTRY } from '../actions';
 
 export default function(state = {}, action) {
   switch (action.type) {
     case FETCH_ALL:
       return _.mapKeys(action.payload.data, '_id');
+    case FETCH_ENTRIES_WITH_QUERY:
+      console.log(action.payload);
+      return state;
     case FETCH_ENTRY:
       return { ...state, [action.payload.data._id]: action.payload.data };
     case DELETE_ENTRY:
@@ -13,28 +16,3 @@ export default function(state = {}, action) {
       return state;
   }
 }
-
-    // case FETCH_WEEK:
-    //   const { entries } = action.payload.data;
-    //   const dailyEntries = {};
-    //   _.forEach(entries, (entry) => {
-    //     (dailyEntries[entry.day_of_week_iso] || []).push(entry);
-    //   });
-    //   const res = {
-    //     daily: dailyEntries,
-    //     weekly: _.filter(entries, 'is_weekly')
-    //   }
-    //   return { ...state, [action.payload.data.week_string]: res }
-    // case ADD_ENTRY:
-    //   const { is_weekly, week_string } = action.entry;
-    //   if (is_weekly) {
-    //     state[week_string].weekly.push(action.entry);
-    //     return state;
-    //   } else {
-    //     const { day_of_week_iso } = action.entry;
-    //     if (!state[week_string].daily[day_of_week_iso]) {
-    //       state[week_string].daily[day_of_week_iso] = [];
-    //     }
-    //     state[week_string].daily[day_of_week_iso].push(action.entry);
-    //     return state;
-    //   }

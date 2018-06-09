@@ -112,6 +112,7 @@ class Entry extends Component {
 }
 
 function mapStateToProps({ entries }, ownProps) {
+  // todo: new EntryModel() doesn't seem to be populating weekStr by default
   return { entry: entries[ownProps.match.params.id] || new EntryModel({}) };
 }
 

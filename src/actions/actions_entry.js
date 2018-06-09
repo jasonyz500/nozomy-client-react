@@ -29,7 +29,11 @@ export function fetchAll() {
 }
 
 export function fetchEntriesWithQuery(startDate, endDate, isWeekly) {
-  const request = axios.get(`${ROOT_URL}/entries?start_date=${startDate}&end_date=${endDate}&is_weekly=${isWeekly}`, getConfig());
+  let url = `${ROOT_URL}/entries?start_date=${startDate}&end_date=${endDate}`;
+  if (!(isWeekly == null)) {
+    url = url + `&is_weekly=${isWeekly}`
+  }
+  const request = axios.get(url, getConfig());
 
   return {
     type: FETCH_ENTRIES_WITH_QUERY,

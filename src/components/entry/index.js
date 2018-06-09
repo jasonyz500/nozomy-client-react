@@ -31,13 +31,11 @@ class Entry extends Component {
     const { entry } = this.props;
     if (entry._id) {
       this.props.updateEntry(entry, () => {
-        console.log('successfully saved entry with id ' + entry._id);
         this.props.history.push('/');
       });
     } else {
       this.props.createEntry(entry, (_id) => {
         entry._id = _id;
-        console.log('successfully created entry with id ', _id);
         this.props.history.push('/');
       });
     }

@@ -1,7 +1,9 @@
 import React, { Component } from 'react';
 import { Button, Modal } from 'react-bootstrap';
 import { connect } from 'react-redux';
+import { Link } from 'react-router-dom';
 import moment from 'moment';
+import _ from 'lodash';
 
 import { fetchEntriesWithQuery } from '../../actions';
 
@@ -41,7 +43,7 @@ class WeekDot extends Component {
   handleShow() {
     const startDate = this.props.weekStr;
     const endDate = moment(startDate).endOf('isoWeek').format('YYYY-MM-DD');
-    this.props.fetchEntriesWithQuery(startDate, endDate, false);
+    this.props.fetchEntriesWithQuery(startDate, endDate);
     this.setState({ show: true });
   }
 
@@ -75,9 +77,27 @@ class WeekDot extends Component {
           </Modal.Header>
           <Modal.Body>
             Weekly Entries
+            {
+              _.map(this.props.weekly, entry => {
+                return (
+                  <li key={entry._id}>
+                    <Link to={`/entries/${entry._id}`}>{entry.headline}</Link>
+                  </li>
+                );
+              })
+            }
           </Modal.Body>
           <Modal.Body>
             Daily Entries
+            {
+              _.map(this.props.daily, entry => {
+                return (
+                  <li key={entry._id}>
+                    <Link to={`/entries/${entry._id}`}>{entry.headline}</Link>
+                  </li>
+                );
+              })
+            }
           </Modal.Body>
           <Modal.Footer>
             <Button onClick={this.handleClose}>Close</Button>
@@ -88,8 +108,18 @@ class WeekDot extends Component {
   }
 }
 
-function mapStateToProps({ week }, ownProps) {
-  return {};
+function mapStateToProps({ entries, weeks }, ownProps) {
+  // look up ids in weeks, get them from entries
+  console.log('weeks', weeks);
+  console.log('entries', entries);
+  const weekStr = ownProps.weekStr;
+  if (!weeks || !weeks[weekStr]) {
+    return {};
+  }
+  return {
+    weekly: _.pick(entries, weeks[weekStr].weekly),
+    daily: _.pick(entries, weeks[weekStr].daily)
+  };
 }
 
 export default connect(mapStateToProps, { fetchEntriesWithQuery })(WeekDot);

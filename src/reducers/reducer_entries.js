@@ -6,8 +6,7 @@ export default function(state = {}, action) {
     case FETCH_ALL:
       return _.mapKeys(action.payload.data, '_id');
     case FETCH_ENTRIES_WITH_QUERY:
-      console.log(action.payload);
-      return state;
+      return _.merge(state, _.mapKeys(action.payload.data, '_id'));
     case FETCH_ENTRY:
       return { ...state, [action.payload.data._id]: action.payload.data };
     case DELETE_ENTRY:

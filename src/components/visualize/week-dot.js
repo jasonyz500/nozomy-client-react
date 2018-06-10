@@ -108,10 +108,9 @@ class WeekDot extends Component {
   }
 }
 
-function mapStateToProps({ entries, weeks }, ownProps) {
+function mapStateToProps(state, ownProps) {
   // look up ids in weeks, get them from entries
-  console.log('weeks', weeks);
-  console.log('entries', entries);
+  const { entries, weeks } = state;
   const weekStr = ownProps.weekStr;
   if (!weeks || !weeks[weekStr]) {
     return {};

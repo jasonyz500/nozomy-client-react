@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import { Field, reduxForm } from 'redux-form';
+import { Button } from 'react-bootstrap';
 import AuthService from '../auth-service';
 import './login.css';
 
@@ -29,7 +30,7 @@ class Login extends Component {
                   type="password" 
                   placeholder="Password" 
             />
-            <button type="submit" className="blue">Sign In</button>
+            <Button type="submit" className="blue">Sign In</Button>
           </form>
         </div>
       </div>

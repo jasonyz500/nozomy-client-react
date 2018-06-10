@@ -4,21 +4,22 @@ import { FETCH_ENTRIES_WITH_QUERY } from '../actions';
 export default function(state = {}, action) {
   switch (action.type) {
     case FETCH_ENTRIES_WITH_QUERY:
+      let res = Object.assign({}, state);
       _.each(action.payload.data, function(entry) {
         const weekStr = entry.week_string;
-        if (!state[weekStr]) {
-          state[weekStr] = {
+        if (!res[weekStr]) {
+          res[weekStr] = {
             weekly: [],
             daily: []
           };
         }
         if (entry.is_weekly) {
-          state[weekStr].weekly.push(entry._id);
+          res[weekStr].weekly.push(entry._id);
         } else {
-          state[weekStr].daily.push(entry._id);
+          res[weekStr].daily.push(entry._id);
         }
       });
-      return state;
+      return res;
     default:
       return state;
   }

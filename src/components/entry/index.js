@@ -83,7 +83,7 @@ class Entry extends Component {
   render() {
     let { entry } = this.props;
     return (
-      <form>
+      <div>
         <DropdownButton
           bsStyle='primary'
           title={entry.is_weekly ? 'Weekly' : 'Daily'}
@@ -131,7 +131,7 @@ class Entry extends Component {
         </textarea>
         <Button type="submit" className="btn btn-success" onClick={this.handleSave.bind(this)}>Save</Button>
         <Button className="btn btn-danger" onClick={this.handleDelete.bind(this)}>Delete</Button>
-      </form>
+      </div>
     );
   }
 }

@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 // import { Field, reduxForm } from 'redux-form';
-import { Button } from 'react-bootstrap';
+import { Button, DropdownButton, MenuItem } from 'react-bootstrap';
 import { WithContext as ReactTags } from 'react-tag-input';
 import DatePicker from 'react-datepicker';
 import moment from 'moment';
@@ -53,6 +53,13 @@ class Entry extends Component {
     }
   }
 
+  handleTimePeriodSelect(isWeekly) {
+    let { entry } = this.props;
+    console.log(isWeekly);
+    entry.is_weekly = isWeekly;
+    this.setState({});
+  }
+
   handleDateSelect(date) {
     let { entry } = this.props;
     entry.date_string = date.format('YYYY-MM-DD');
@@ -76,7 +83,27 @@ class Entry extends Component {
   render() {
     let { entry } = this.props;
     return (
-      <div className="form-group">
+      <form>
+        <DropdownButton
+          bsStyle='primary'
+          title={entry.is_weekly ? 'Weekly' : 'Daily'}
+          id="timeRangePicker"
+        >
+          <MenuItem 
+            eventKey="1" 
+            active={!entry.is_weekly}
+            onClick={this.handleTimePeriodSelect.bind(this)}
+          >
+            Daily
+          </MenuItem>
+          <MenuItem
+            eventKey="2"
+            active={entry.is_weekly}
+            onClick={this.handleTimePeriodSelect.bind(this)}
+          >
+            Weekly
+          </MenuItem>
+        </DropdownButton>
         <DatePicker
           selected={moment(entry.date_string) || moment()}
           onChange={this.handleDateSelect.bind(this)}
@@ -104,7 +131,7 @@ class Entry extends Component {
         </textarea>
         <Button type="submit" className="btn btn-success" onClick={this.handleSave.bind(this)}>Save</Button>
         <Button className="btn btn-danger" onClick={this.handleDelete.bind(this)}>Delete</Button>
-      </div>
+      </form>
     );
   }
 }

@@ -55,7 +55,6 @@ class Entry extends Component {
 
   handleTimePeriodSelect(isWeekly) {
     let { entry } = this.props;
-    console.log(isWeekly);
     entry.is_weekly = isWeekly;
     this.setState({});
   }
@@ -92,14 +91,14 @@ class Entry extends Component {
           <MenuItem 
             eventKey="1" 
             active={!entry.is_weekly}
-            onClick={this.handleTimePeriodSelect.bind(this)}
+            onClick={() => this.handleTimePeriodSelect(false)}
           >
             Daily
           </MenuItem>
           <MenuItem
             eventKey="2"
             active={entry.is_weekly}
-            onClick={this.handleTimePeriodSelect.bind(this)}
+            onClick={() => this.handleTimePeriodSelect(true)}
           >
             Weekly
           </MenuItem>
